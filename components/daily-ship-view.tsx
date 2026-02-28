@@ -220,7 +220,14 @@ export function DailyShipView({
         />
 
         <footer className="ship-meta reveal delay-4" aria-label="Ship metadata">
-          <span dir="auto">{current.author}</span>
+          <a
+            href="https://x.com/devi_maker"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Open @devi_maker on X"
+          >
+            <span dir="auto">{current.author}</span>
+          </a>
           <span>{formatShipCountLabel(totalShips, locale)}</span>
         </footer>
       </section>

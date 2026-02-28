@@ -39,7 +39,7 @@ const rawEntries: RawShipEntry[] = [
       src: "/ships/dailyship-20260228.png",
       alt: "Homepage screenshot of Daily Ship",
     },
-    author: "@devinci",
+    author: "@devi_maker",
     tags: ["meta", "portfolio", "journal"],
   },
   {
@@ -53,7 +53,7 @@ const rawEntries: RawShipEntry[] = [
       src: "/ships/infiniteescape-20260228.jpg",
       alt: "Screenshot of Infinite Escape project",
     },
-    author: "@devinci",
+    author: "@devi_maker",
     tags: ["game", "prototype"],
   },
   {
@@ -67,7 +67,7 @@ const rawEntries: RawShipEntry[] = [
       src: "/ships/daio-20260228.jpg",
       alt: "Screenshot of daio.md project",
     },
-    author: "@devinci",
+    author: "@devi_maker",
     tags: ["agents", "coordination"],
   },
 ];

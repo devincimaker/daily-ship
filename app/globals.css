@@ -3,34 +3,81 @@
 :root {
   --font-body: "Bricolage Grotesque Variable", "Bricolage Grotesque", sans-serif;
   --font-display: "Fraunces Variable", "Fraunces", serif;
+
   --paper: oklch(95.8% 0.023 88);
   --paper-deep: oklch(90.5% 0.04 84);
+  --paper-lift: oklch(98.6% 0.01 86);
   --ink: oklch(28% 0.026 45);
   --ink-muted: oklch(43% 0.03 52);
+  --ink-deep: oklch(18% 0.019 46);
   --accent: oklch(69% 0.17 58);
-  --accent-deep: oklch(56% 0.14 55);
   --frame: oklch(30% 0.03 50);
+
+  --surface-page: var(--paper);
+  --surface-page-deep: var(--paper-deep);
+  --surface-panel: color-mix(in oklch, var(--paper) 82%, var(--paper-lift) 18%);
+  --surface-media: color-mix(in oklch, var(--paper) 84%, var(--paper-deep) 16%);
+  --surface-streak: color-mix(in oklch, var(--paper) 70%, var(--accent) 30%);
+  --surface-control: color-mix(in oklch, var(--paper) 72%, var(--accent) 28%);
+  --surface-control-hover: color-mix(in oklch, var(--paper) 50%, var(--accent) 50%);
+  --surface-github: color-mix(in oklch, var(--paper) 68%, var(--accent) 32%);
+  --surface-github-hover: color-mix(in oklch, var(--paper) 58%, var(--accent) 42%);
+
+  --border-strong: var(--frame);
+  --text-body: var(--ink);
+  --text-muted: var(--ink-muted);
+  --text-kicker: oklch(46% 0.108 56);
+  --text-action: color-mix(in oklch, var(--ink) 86%, var(--ink-deep) 14%);
+  --text-action-muted: color-mix(in oklch, var(--ink) 85%, var(--ink-deep) 15%);
+  --focus-ring: color-mix(in oklch, var(--accent) 55%, var(--frame) 45%);
+
+  --decor-glow-a: oklch(92% 0.09 85 / 0.34);
+  --decor-glow-b: oklch(94% 0.07 72 / 0.35);
+  --decor-stripe: oklch(95% 0.013 90 / 0.28);
+
+  --space-xs: 0.4rem;
+  --space-sm: 0.6rem;
+  --space-md: 0.95rem;
+  --space-lg: 1.5rem;
+  --space-fluid-page: clamp(0.85rem, 2.2vw, 2rem);
+  --space-fluid-layout: clamp(0.9rem, 2vw, 1.5rem);
+  --space-fluid-card: clamp(0.95rem, 2vw, 1.5rem);
+
+  --size-control: 54px;
+  --size-hit-min: 44px;
 }
 
 @theme inline {
   --font-sans: var(--font-body);
 }
 
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   min-height: 100vh;
   margin: 0;
-  color: var(--ink);
+  color: var(--text-body);
   background:
-    radial-gradient(circle at 18% 12%, oklch(92% 0.09 85 / 0.34), transparent 40%),
-    radial-gradient(circle at 82% 4%, oklch(94% 0.07 72 / 0.35), transparent 32%),
-    linear-gradient(160deg, var(--paper), var(--paper-deep));
+    radial-gradient(circle at 18% 12%, var(--decor-glow-a), transparent 40%),
+    radial-gradient(circle at 82% 4%, var(--decor-glow-b), transparent 32%),
+    linear-gradient(160deg, var(--surface-page), var(--surface-page-deep));
   font-family: var(--font-body), sans-serif;
 }
 
 .daily-ship {
   position: relative;
   min-height: 100dvh;
-  padding: clamp(1.2rem, 2vw, 2rem);
+  padding-inline: var(--space-fluid-page);
+  padding-block: clamp(1rem, 2vw, 2rem);
 }
 
 .daily-ship::before {
@@ -42,22 +89,27 @@ body {
       0deg,
       transparent,
       transparent 5px,
-      oklch(95% 0.013 90 / 0.28) 5px,
-      oklch(95% 0.013 90 / 0.28) 6px
+      var(--decor-stripe) 5px,
+      var(--decor-stripe) 6px
     );
   content: "";
   pointer-events: none;
 }
 
 .ship-layout {
-  width: min(100%, 72rem);
+  inline-size: 100%;
+  max-inline-size: 72rem;
   margin: 0 auto;
   display: grid;
-  gap: clamp(1rem, 2vw, 1.5rem);
+  gap: var(--space-fluid-layout);
+}
+
+.ship-layout > * {
+  min-inline-size: 0;
 }
 
 .ship-header {
-  max-width: 50rem;
+  max-inline-size: min(50rem, 100%);
 }
 
 .eyebrow {
@@ -66,36 +118,42 @@ body {
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--accent-deep);
+  color: var(--text-kicker);
 }
 
 .ship-header h1 {
   margin: 0.35rem 0 0;
   font-family: var(--font-display), serif;
-  font-size: clamp(2.2rem, 4.8vw, 4.3rem);
+  font-size: clamp(1.75rem, 5.5vw, 4.1rem);
   line-height: 0.98;
+  max-inline-size: 12ch;
   text-wrap: balance;
+  overflow-wrap: anywhere;
 }
 
 .subhead {
   margin: 0.7rem 0 0;
-  max-width: 45ch;
+  max-inline-size: 45ch;
   font-size: clamp(1rem, 1.3vw, 1.2rem);
-  color: var(--ink-muted);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
 }
 
 .streak-pill {
   justify-self: start;
   margin: 0;
   display: inline-flex;
+  flex-wrap: wrap;
   align-items: baseline;
   gap: 0.75rem;
-  border: 2px solid color-mix(in oklch, var(--accent) 66%, var(--frame));
-  background: color-mix(in oklch, var(--paper) 70%, var(--accent) 30%);
+  border: 2px solid color-mix(in oklch, var(--accent) 66%, var(--border-strong));
+  background: var(--surface-streak);
   padding: 0.5rem 0.95rem;
   font-size: 0.92rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
+  max-inline-size: 100%;
+  overflow-wrap: anywhere;
 }
 
 .streak-pill strong {
@@ -107,16 +165,17 @@ body {
 
 .ship-panel {
   container-type: inline-size;
-  border: 4px solid var(--frame);
-  background: color-mix(in oklch, var(--paper) 82%, white 18%);
+  border: 4px solid var(--border-strong);
+  background: var(--surface-panel);
+  max-inline-size: 100%;
 }
 
 .ship-media {
   position: relative;
-  width: 100%;
+  inline-size: 100%;
   aspect-ratio: 16 / 10;
-  border-bottom: 4px solid var(--frame);
-  background: color-mix(in oklch, var(--paper) 84%, var(--paper-deep) 16%);
+  border-bottom: 4px solid var(--border-strong);
+  background: var(--surface-media);
 }
 
 .ship-image {
@@ -127,7 +186,8 @@ body {
 .ship-content {
   display: grid;
   gap: 0.7rem;
-  padding: clamp(1rem, 2vw, 1.5rem);
+  padding: var(--space-fluid-card);
+  min-inline-size: 0;
 }
 
 .ship-date {
@@ -136,7 +196,7 @@ body {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.14em;
-  color: var(--accent-deep);
+  color: var(--text-kicker);
 }
 
 .ship-content h2 {
@@ -144,66 +204,99 @@ body {
   font-family: var(--font-display), serif;
   font-size: clamp(1.7rem, 4.2cqi, 3rem);
   line-height: 1;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .ship-content p {
   margin: 0;
-  max-width: 64ch;
-  color: var(--ink-muted);
+  max-inline-size: 64ch;
+  color: var(--text-muted);
   font-size: 1.04rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .ship-links {
-  display: inline-flex;
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  gap: 0.5rem;
+  gap: var(--space-sm);
+  min-inline-size: 0;
 }
 
 .ship-primary-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   justify-self: start;
-  margin-top: 0.4rem;
-  border: 2px solid var(--frame);
+  border: 2px solid var(--border-strong);
   background: var(--accent);
-  color: color-mix(in oklch, var(--ink) 86%, black 14%);
+  color: var(--text-action);
+  appearance: none;
+  min-block-size: var(--size-hit-min);
   padding: 0.58rem 0.9rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   text-decoration: none;
+  text-wrap: pretty;
+  max-inline-size: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  cursor: pointer;
   transition:
     transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
     background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+  border-radius: 0;
+  line-height: 1.1;
+}
+
+.ship-primary-link.is-disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+  opacity: 0.68;
+  background: color-mix(in oklch, var(--surface-page) 78%, var(--paper-deep) 22%);
+}
+
+.ship-primary-link[disabled] {
+  pointer-events: none;
+  cursor: not-allowed;
+  opacity: 0.58;
 }
 
 .ship-primary-link:hover {
   transform: translate(-2px, -2px);
-  background: color-mix(in oklch, var(--accent) 84%, var(--paper) 16%);
+  background: color-mix(in oklch, var(--accent) 84%, var(--surface-page) 16%);
 }
 
 .ship-github-link {
-  margin-top: 0.4rem;
-  width: 2.6rem;
-  height: 2.45rem;
-  border: 2px solid var(--frame);
-  background: color-mix(in oklch, var(--paper) 68%, var(--accent) 32%);
-  color: color-mix(in oklch, var(--ink) 85%, black 15%);
+  min-inline-size: var(--size-hit-min);
+  min-block-size: var(--size-hit-min);
+  border: 2px solid var(--border-strong);
+  background: var(--surface-github);
+  color: var(--text-action-muted);
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  text-decoration: none;
+  cursor: pointer;
+  border-radius: 0;
   transition:
     transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
     background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ship-github-link svg {
-  width: 1.2rem;
-  height: 1.2rem;
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
   fill: currentColor;
 }
 
 .ship-github-link:hover {
   transform: translate(-2px, -2px);
-  background: color-mix(in oklch, var(--paper) 58%, var(--accent) 42%);
+  background: var(--surface-github-hover);
 }
 
 .ship-controls {
@@ -213,22 +306,27 @@ body {
 }
 
 .ship-control {
-  width: 3.4rem;
-  height: 3.4rem;
-  border: 3px solid var(--frame);
-  background: color-mix(in oklch, var(--paper) 72%, var(--accent) 28%);
-  color: var(--ink);
+  inline-size: var(--size-control);
+  block-size: var(--size-control);
+  border: 3px solid var(--border-strong);
+  background: var(--surface-control);
+  color: var(--text-body);
+  appearance: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  border-radius: 0;
   transition:
     transform 200ms cubic-bezier(0.16, 1, 0.3, 1),
     background-color 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .ship-control svg {
-  width: 1.35rem;
-  height: 1.35rem;
+  inline-size: 1.35rem;
+  block-size: 1.35rem;
   stroke: currentColor;
   fill: none;
   stroke-width: 2.2;
@@ -237,8 +335,8 @@ body {
 }
 
 .ship-control-random svg {
-  width: 1.15rem;
-  height: 1.15rem;
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
 }
 
 .ship-control-random circle {
@@ -248,7 +346,7 @@ body {
 
 .ship-control:hover {
   transform: translateY(-2px);
-  background: color-mix(in oklch, var(--paper) 50%, var(--accent) 50%);
+  background: var(--surface-control-hover);
 }
 
 .ship-control.is-disabled {
@@ -256,30 +354,45 @@ body {
   pointer-events: none;
 }
 
+.ship-control[disabled] {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
 .ship-control:focus-visible,
 .ship-primary-link:focus-visible,
 .ship-github-link:focus-visible {
-  outline: 3px solid color-mix(in oklch, var(--accent) 55%, black 45%);
+  outline: 3px solid var(--focus-ring);
   outline-offset: 3px;
 }
 
 .ship-meta {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem 1.1rem;
+  gap: var(--space-sm) 1.1rem;
   font-size: 0.9rem;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--ink-muted);
+  color: var(--text-muted);
+}
+
+.ship-meta span {
+  min-inline-size: 0;
+  overflow-wrap: anywhere;
+}
+
+[dir="rtl"] .ship-arrow-icon {
+  transform: scaleX(-1);
 }
 
 .empty-state {
   min-height: 100dvh;
-  padding: 2rem;
+  padding: var(--space-fluid-page);
   display: grid;
   align-content: center;
   justify-items: start;
-  gap: 0.6rem;
+  gap: var(--space-sm);
 }
 
 .empty-state h1 {
@@ -290,8 +403,35 @@ body {
 
 .empty-state p {
   margin: 0;
-  max-width: 40ch;
-  color: var(--ink-muted);
+  max-inline-size: 40ch;
+  color: var(--text-muted);
+}
+
+.ship-image-retry {
+  min-inline-size: var(--size-control);
+  min-block-size: var(--size-hit-min);
+  border: 2px solid var(--border-strong);
+  background: var(--surface-control);
+  color: var(--text-action);
+  appearance: none;
+  border-radius: 0;
+  padding: 0.4rem 0.8rem;
+  transition:
+    transform 180ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 180ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ship-image-retry:hover {
+  transform: translate(-1px, -1px);
+  background: color-mix(in oklch, var(--surface-control) 70%, var(--surface-page) 30%);
+}
+
+.ship-image-fallback {
+  display: grid;
+  justify-items: start;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  min-height: 100%;
 }
 
 @container (max-width: 48rem) {
@@ -301,16 +441,28 @@ body {
 }
 
 @media (max-width: 42rem) {
+  .daily-ship {
+    padding-inline: clamp(0.75rem, 4vw, 1.3rem);
+  }
+
   .ship-layout {
     gap: 0.95rem;
   }
 
+  .ship-header h1 {
+    font-size: clamp(1.55rem, 10vw, 2.75rem);
+    max-inline-size: 10ch;
+    text-wrap: pretty;
+  }
+
   .ship-links {
-    width: 100%;
+    inline-size: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
   }
 
   .ship-primary-link {
-    width: 100%;
+    inline-size: 100%;
     justify-self: stretch;
     text-align: center;
   }
@@ -318,7 +470,6 @@ body {
 
 @media (prefers-reduced-motion: no-preference) {
   .reveal {
-    opacity: 0;
     animation: reveal-up 560ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
   }
 
@@ -339,13 +490,44 @@ body {
   }
 }
 
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .ship-control,
+  .ship-primary-link,
+  .ship-github-link,
+  .ship-image-retry {
+    animation: none !important;
+    transition: none !important;
+    transform: none;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: oklch(19.5% 0.012 74);
+    --paper-deep: oklch(14.8% 0.014 72);
+    --paper-lift: oklch(24.4% 0.014 79);
+    --ink: oklch(92% 0.024 84);
+    --ink-muted: oklch(82% 0.018 82);
+    --ink-deep: oklch(99% 0.006 90);
+    --accent: oklch(74% 0.16 60);
+    --frame: oklch(56% 0.024 68);
+
+    --surface-control: color-mix(in oklch, var(--paper) 70%, var(--accent) 30%);
+    --surface-control-hover: color-mix(in oklch, var(--paper) 56%, var(--accent) 44%);
+    --surface-github: color-mix(in oklch, var(--paper) 68%, var(--accent) 32%);
+    --surface-github-hover: color-mix(in oklch, var(--paper) 58%, var(--accent) 42%);
+    --surface-streak: color-mix(in oklch, var(--paper) 70%, var(--accent) 30%);
+    --surface-panel: color-mix(in oklch, var(--paper) 76%, var(--paper-lift) 24%);
+    --surface-media: color-mix(in oklch, var(--paper) 76%, var(--paper-deep) 24%);
+  }
+}
+
 @keyframes reveal-up {
   from {
-    opacity: 0;
     transform: translateY(10px);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
   }
 }

@@ -1,6 +1,11 @@
-import Image from "next/image";
 import Link from "next/link";
-import { formatShipDate, type ShipEntry } from "@/lib/ships";
+import {
+  formatShipCountLabel,
+  formatShipDate,
+  formatStreakLabel,
+  type ShipEntry,
+} from "@/lib/ships";
+import { ResilientShipImage } from "@/components/resilient-ship-image";
 
 type DailyShipViewProps = {
   current: ShipEntry;
@@ -8,6 +13,8 @@ type DailyShipViewProps = {
   newer: ShipEntry | null;
   streak: number;
   totalShips: number;
+  locale?: string;
+  direction?: "ltr" | "rtl";
 };
 
 type ShipNavButtonProps = {
@@ -26,14 +33,14 @@ type ShipNavigationProps = {
 function ArrowIcon({ direction }: { direction: "left" | "right" }) {
   if (direction === "left") {
     return (
-      <svg viewBox="0 0 20 20" aria-hidden="true">
+      <svg viewBox="0 0 20 20" className="ship-arrow-icon" aria-hidden="true">
         <path d="M13.8 3.2L6.2 10l7.6 6.8" />
       </svg>
     );
   }
 
   return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
+    <svg viewBox="0 0 20 20" className="ship-arrow-icon" aria-hidden="true">
       <path d="M6.2 3.2L13.8 10l-7.6 6.8" />
     </svg>
   );
@@ -73,14 +80,20 @@ function GitHubIcon() {
 function ShipNavButton({ href, direction, label }: ShipNavButtonProps) {
   if (!href) {
     return (
-      <span className="ship-control is-disabled" aria-label={`${label} unavailable`}>
+      <button
+        type="button"
+        className="ship-control is-disabled"
+        aria-label={`${label} unavailable`}
+        aria-disabled="true"
+        disabled
+      >
         <ArrowIcon direction={direction} />
-      </span>
+      </button>
     );
   }
 
   return (
-    <Link href={href} className="ship-control" aria-label={label}>
+    <Link href={href} prefetch={false} className="ship-control" aria-label={label}>
       <ArrowIcon direction={direction} />
     </Link>
   );
@@ -117,9 +130,11 @@ export function DailyShipView({
   newer,
   streak,
   totalShips,
+  locale,
+  direction = "ltr",
 }: DailyShipViewProps) {
   return (
-    <main className="daily-ship">
+    <main className="daily-ship" dir={direction}>
       <section className="ship-layout">
         <header className="ship-header reveal delay-0">
           <p className="eyebrow">dailyship.xyz</p>
@@ -132,7 +147,7 @@ export function DailyShipView({
 
         <p className="streak-pill reveal delay-1">
           <span>Current streak</span>
-          <strong>{streak} days</strong>
+          <strong>{formatStreakLabel(streak, locale)}</strong>
         </p>
 
         <ShipNavigation
@@ -144,10 +159,9 @@ export function DailyShipView({
 
         <article className="ship-panel reveal delay-2">
           <div className="ship-media">
-            <Image
+            <ResilientShipImage
               src={current.image.src}
               alt={current.image.alt}
-              fill
               priority
               className="ship-image"
               sizes="(max-width: 1024px) 100vw, 60vw"
@@ -155,23 +169,38 @@ export function DailyShipView({
           </div>
 
           <div className="ship-content">
-            <p className="ship-date">{formatShipDate(current.date)}</p>
-            <h2>{current.title}</h2>
-            <p>{current.description}</p>
+            <time className="ship-date" dateTime={current.date}>
+              {formatShipDate(current.date, locale)}
+            </time>
+            <h2 dir="auto">{current.title}</h2>
+            <p dir="auto">{current.description}</p>
             <div className="ship-links">
-              <a
-                href={current.projectUrl}
-                target="_blank"
-                rel="noreferrer"
-                className="ship-primary-link"
-              >
-                Visit project
-              </a>
+              {current.projectUrl ? (
+                <a
+                  href={current.projectUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="ship-primary-link"
+                  aria-label={`Visit ${current.title} project (opens in a new tab)`}
+                >
+                  Visit project
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  className="ship-primary-link is-disabled"
+                  aria-label="Project link unavailable"
+                  disabled
+                  aria-disabled="true"
+                >
+                  Project unavailable
+                </button>
+              )}
               {current.githubUrl ? (
                 <a
                   href={current.githubUrl}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="ship-github-link"
                   aria-label="Open GitHub repository"
                   title="Open GitHub repository"
@@ -190,10 +219,9 @@ export function DailyShipView({
           ariaLabel="Bottom ship navigation"
         />
 
-        <footer className="ship-meta reveal delay-4">
-          <span>{formatShipDate(current.date)}</span>
-          <span>{current.author}</span>
-          <span>{totalShips} ships logged</span>
+        <footer className="ship-meta reveal delay-4" aria-label="Ship metadata">
+          <span dir="auto">{current.author}</span>
+          <span>{formatShipCountLabel(totalShips, locale)}</span>
         </footer>
       </section>
     </main>

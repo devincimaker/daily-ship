@@ -8,7 +8,7 @@ type RootErrorProps = {
 export default function RootError({ error, reset }: RootErrorProps) {
   return (
     <main className="empty-state" role="alert" aria-live="assertive">
-      <p className="eyebrow">dailyship.xyz</p>
+      <p className="eyebrow">dailyship</p>
       <h1>Something failed while loading this ship.</h1>
       <p>
         Try again. If this keeps happening, a refresh should recover from temporary

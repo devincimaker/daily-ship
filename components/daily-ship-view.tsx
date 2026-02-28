@@ -137,7 +137,7 @@ export function DailyShipView({
     <main className="daily-ship" dir={direction}>
       <section className="ship-layout">
         <header className="ship-header reveal delay-0">
-          <p className="eyebrow">dailyship.xyz</p>
+          <p className="eyebrow">dailyship</p>
           <h1>One thing shipped every day.</h1>
           <p className="subhead">
             Hi, I&apos;m Devi and I like to create. Here&apos;s a public log of my

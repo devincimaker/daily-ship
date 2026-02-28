@@ -18,7 +18,7 @@ export default async function Home({ searchParams }: HomePageProps) {
   if (!latestShip) {
     return (
       <main className="empty-state">
-        <p className="eyebrow">dailyship.xyz</p>
+        <p className="eyebrow">dailyship</p>
         <h1>Start shipping.</h1>
         <p>Add your first entry in `lib/ships.ts` to bring the site to life.</p>
       </main>

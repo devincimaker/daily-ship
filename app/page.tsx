@@ -1,7 +1,18 @@
 import { DailyShipView } from "@/components/daily-ship-view";
+import { resolveDirection, resolveLocale } from "@/lib/i18n";
 import { getCurrentStreak, getLatestShip, getShipContext } from "@/lib/ships";
 
-export default function Home() {
+type HomePageProps = {
+  searchParams: Promise<{
+    locale?: string;
+    dir?: string;
+  }>;
+};
+
+export default async function Home({ searchParams }: HomePageProps) {
+  const params = await searchParams;
+  const locale = resolveLocale(params.locale);
+  const direction = resolveDirection(params.dir, locale);
   const latestShip = getLatestShip();
 
   if (!latestShip) {
@@ -31,6 +42,8 @@ export default function Home() {
       newer={context.newer}
       streak={getCurrentStreak()}
       totalShips={context.total}
+      locale={locale}
+      direction={direction}
     />
   );
 }

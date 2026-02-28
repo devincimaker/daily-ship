@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { DailyShipView } from "@/components/daily-ship-view";
+import { resolveDirection, resolveLocale } from "@/lib/i18n";
 import {
   getAllShips,
   getCurrentStreak,
@@ -11,6 +12,10 @@ import {
 type ShipPageProps = {
   params: Promise<{
     slug: string;
+  }>;
+  searchParams: Promise<{
+    locale?: string;
+    dir?: string;
   }>;
 };
 
@@ -38,7 +43,10 @@ export async function generateMetadata({
   };
 }
 
-export default async function ShipPage({ params }: ShipPageProps) {
+export default async function ShipPage({ params, searchParams }: ShipPageProps) {
+  const query = await searchParams;
+  const locale = resolveLocale(query.locale);
+  const direction = resolveDirection(query.dir, locale);
   const { slug } = await params;
   const context = getShipContext(slug);
 
@@ -53,6 +61,8 @@ export default async function ShipPage({ params }: ShipPageProps) {
       newer={context.newer}
       streak={getCurrentStreak()}
       totalShips={context.total}
+      locale={locale}
+      direction={direction}
     />
   );
 }

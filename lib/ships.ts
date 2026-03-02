@@ -28,6 +28,21 @@ const DEFAULT_TAG = "uncategorized";
 
 const rawEntries: RawShipEntry[] = [
   {
+    date: "2026-03-01",
+    slug: "ainet-md",
+    title: "Agentic Internet",
+    projectUrl: "https://ainet.md/",
+    githubUrl: "https://github.com/TheDAIO/ainet",
+    description:
+      "A curated directory of platforms, protocols, and services built for AI agents — mapping the emerging machine-readable web.",
+    image: {
+      src: "/ships/ainet-20260301.png",
+      alt: "Screenshot of Agentic Internet directory",
+    },
+    author: "@devi_maker",
+    tags: ["agents", "directory", "infrastructure"],
+  },
+  {
     date: "2026-02-28",
     slug: "dailyship-xyz",
     title: "Daily Ship",
